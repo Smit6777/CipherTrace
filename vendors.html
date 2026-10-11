@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -22,49 +22,51 @@
       <nav class="sidebar-nav">
         <span class="nav-section-label">Operations</span>
         <a href="index.html">
-          <span class="nav-icon">📊</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
           <span>Overview</span>
         </a>
         <a href="cases.html">
-          <span class="nav-icon">📂</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
           <span>Workflow Cases</span>
         </a>
         <a href="evidence.html">
-          <span class="nav-icon">🗂</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
           <span>Evidence Cards</span>
         </a>
 
         <span class="nav-section-label">Compliance & Control</span>
         <a href="settings.html">
-          <span class="nav-icon">⚙️</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
           <span>Approval Matrix</span>
         </a>
-        <a href="vendors.html" class="active">
-          <span class="nav-icon">🏢</span>
+        <a href="vendors.html" class="active" aria-current="page">
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
           <span>Vendors & Compliance</span>
         </a>
         <a href="audit.html">
-          <span class="nav-icon">📜</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
           <span>Audit Trail</span>
         </a>
 
-        <span class="nav-section-label">Development</span>
+        <span class="nav-section-label">Testing & Sandbox</span>
         <a href="test.html">
-          <span class="nav-icon">🧪</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.1 19.34A2 2 0 0 0 5.76 22h12.48a2 2 0 0 0 1.66-2.66L14 9.31V2"/><line x1="8.5" x2="15.5" y1="2" y2="2"/><line x1="8.5" x2="15.5" y1="14" y2="14"/></svg>
           <span>Testing Lab</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
-        <div>CipherTrace Engine v1.2</div>
-        <div style="font-size: 0.6875rem; color: #475569; margin-top: 2px;">Audit First • Zero Trust</div>
+        <div>Engine Status: Operational</div>
+        <div style="font-size: 0.625rem; color: #475569;">v1.2.0 • MySQL Verified</div>
       </div>
     </aside>
 
     <div class="app-main-wrapper">
       <header class="app-topbar">
         <div class="topbar-left">
-          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
           <div class="topbar-breadcrumbs">
             <a href="index.html">CipherTrace</a>
             <span class="separator">/</span>
@@ -86,7 +88,7 @@
       <main class="page-content">
         <div class="page-header">
           <h1 class="page-title">Vendors & Compliance Directory</h1>
-          <p class="page-subtitle">Track registered vendor identities, GST numbers, risk levels, and compliance documentation health.</p>
+          <p class="page-subtitle">Track registered vendor identities, GST numbers, risk levels, and compliance documentation status.</p>
         </div>
 
         <div class="table-container">
@@ -131,7 +133,7 @@
         tbody.innerHTML = '';
 
         if (!data.vendors || data.vendors.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem;">No vendors found.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem; color:var(--text-muted);">No registered vendors found.</td></tr>';
           return;
         }
 
@@ -147,10 +149,15 @@
           tdName.textContent = v.vendor_name;
 
           const tdEmail = document.createElement('td');
+          tdEmail.style.color = 'var(--text-muted)';
           tdEmail.textContent = v.vendor_email;
 
           const tdGst = document.createElement('td');
-          tdGst.innerHTML = v.gst_id ? `<span class="rule-tag">${v.gst_id}</span>` : '<span style="color:#94a3b8;">Missing</span>';
+          if (v.gst_id) {
+            tdGst.innerHTML = `<span class="rule-tag">${v.gst_id}</span>`;
+          } else {
+            tdGst.innerHTML = '<span style="color:var(--text-muted); font-size:0.75rem;">Missing</span>';
+          }
 
           const tdRisk = document.createElement('td');
           const riskColor = v.risk_level === 'High' ? 'badge-red' : (v.risk_level === 'Medium' ? 'badge-amber' : 'badge-green');
@@ -161,34 +168,28 @@
           tdStatus.innerHTML = `<span class="badge ${statusCol}">${v.vendor_status}</span>`;
 
           const tdBank = document.createElement('td');
+          tdBank.style.fontSize = '0.75rem';
           tdBank.textContent = v.bank_verification_status || 'Pending';
 
           const tdDocs = document.createElement('td');
           if (v.documents && v.documents.length > 0) {
             const pills = v.documents.map(d => {
               const bg = d.verification_status === 'Verified' ? 'badge-green' : (d.verification_status === 'Expired' ? 'badge-red' : 'badge-amber');
-              return `<span class="badge ${bg}" style="margin: 2px; font-size: 0.6875rem;">${d.document_type}: ${d.verification_status}</span>`;
+              return `<span class="badge ${bg}" style="margin: 2px; font-size: 0.625rem;">${d.document_type}: ${d.verification_status}</span>`;
             }).join(' ');
             tdDocs.innerHTML = pills;
           } else {
-            tdDocs.innerHTML = '<span style="color:#94a3b8;">No documents attached</span>';
+            tdDocs.innerHTML = '<span style="color:var(--text-muted); font-size:0.75rem;">No documents attached</span>';
           }
 
-          tr.appendChild(tdId);
-          tr.appendChild(tdName);
-          tr.appendChild(tdEmail);
-          tr.appendChild(tdGst);
-          tr.appendChild(tdRisk);
-          tr.appendChild(tdStatus);
-          tr.appendChild(tdBank);
-          tr.appendChild(tdDocs);
+          tr.append(tdId, tdName, tdEmail, tdGst, tdRisk, tdStatus, tdBank, tdDocs);
           tbody.appendChild(tr);
         });
       } catch (err) {
+        console.error('Vendors fetch error:', err);
         showToast('Failed to load vendors', 'error');
       }
     });
   </script>
 </body>
 </html>
-

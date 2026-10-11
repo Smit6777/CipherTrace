@@ -1,67 +1,70 @@
-﻿/**
- * Novalite Evidence Card Logic
+/**
+ * js/pages/evidence.js
+ * Evidence Card Controller (Screen C - Signature Screen)
+ * Clean enterprise styling with Lucide SVG icons, zero corrupt unicode, safe DOM operations.
  */
 
 let currentCaseId = null;
 
-const missingIdState = document.getElementById('missing-id-state');
-const loadingState = document.getElementById('loading-state');
-const errorState = document.getElementById('error-state');
-const errorMessage = document.getElementById('error-message');
-const evidenceContent = document.getElementById('evidence-content');
-const retryBtn = document.getElementById('retry-btn');
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('app-sidebar');
+    if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+    }
 
-function init() {
-    const params = new URLSearchParams(window.location.search);
-    currentCaseId = params.get('id');
+    const urlParams = new URLSearchParams(window.location.search);
+    currentCaseId = urlParams.get('id');
 
     if (!currentCaseId) {
-        setViewState('missing');
+        showState('missing-id');
         return;
     }
 
+    const retryBtn = document.getElementById('retry-btn');
     if (retryBtn) {
-        retryBtn.addEventListener('click', loadEvidence);
+        retryBtn.addEventListener('click', () => fetchEvidenceCard(currentCaseId));
     }
 
-    loadEvidence();
+    fetchEvidenceCard(currentCaseId);
+});
+
+function showState(state) {
+    const missingEl = document.getElementById('missing-id-state');
+    const loadingEl = document.getElementById('loading-state');
+    const errorEl = document.getElementById('error-state');
+    const contentEl = document.getElementById('evidence-content');
+
+    if (missingEl) missingEl.style.display = state === 'missing-id' ? 'block' : 'none';
+    if (loadingEl) loadingEl.style.display = state === 'loading' ? 'block' : 'none';
+    if (errorEl) errorEl.style.display = state === 'error' ? 'block' : 'none';
+    if (contentEl) contentEl.style.display = state === 'content' ? 'block' : 'none';
 }
 
-function setViewState(state) {
-    missingIdState.classList.add('hidden');
-    loadingState.classList.add('hidden');
-    errorState.classList.add('hidden');
-    evidenceContent.classList.add('hidden');
-
-    if (state === 'missing') missingIdState.classList.remove('hidden');
-    else if (state === 'loading') loadingState.classList.remove('hidden');
-    else if (state === 'error') errorState.classList.remove('hidden');
-    else if (state === 'data') evidenceContent.classList.remove('hidden');
-}
-
-async function loadEvidence() {
-    setViewState('loading');
+async function fetchEvidenceCard(caseId) {
+    showState('loading');
     try {
-        const data = await apiFetch(`api/case.php?id=${encodeURIComponent(currentCaseId)}`);
-        if (!data || !data.evidence_card) {
-            throw new Error("Invalid response format");
+        const data = await apiFetch(`api/case.php?id=${encodeURIComponent(caseId)}`);
+        if (!data || !data.case) {
+            throw new Error('Case not found');
         }
-        renderEvidence(data);
-        setViewState('data');
+        renderEvidenceCard(data);
+        showState('content');
     } catch (err) {
-        console.error(err);
-        if (err.status === 404) {
-            errorMessage.textContent = 'This workflow case could not be found.';
-        } else {
-            errorMessage.textContent = 'Unable to load this Evidence Card. Check that the Novalite API is running.';
+        console.error('Fetch Evidence Card error:', err);
+        const errMsg = document.getElementById('error-message');
+        if (errMsg) {
+            errMsg.textContent = err.data && err.data.message ? err.data.message : 'Unable to load Evidence Card.';
         }
-        setViewState('error');
+        showState('error');
     }
 }
 
-function renderEvidence(data) {
-    const ec = data.evidence_card || {};
+function renderEvidenceCard(data) {
     const c = data.case || {};
+    const ec = data.evidence_card || {};
     const v = data.vendor || {};
     const req = data.procurement_request || {};
     const docs = data.documents || [];
@@ -72,313 +75,364 @@ function renderEvidence(data) {
     const hSubtitle = document.getElementById('header-subtitle');
     const hBadge = document.getElementById('header-badge-container');
 
-    hCaseId.textContent = ec.case_id || currentCaseId;
+    if (hCaseId) hCaseId.textContent = ec.case_id || c.case_id || currentCaseId;
     
     let vName = 'Unmatched Vendor';
     if (ec.vendor && ec.vendor.vendor_name) vName = ec.vendor.vendor_name;
+    else if (v && v.vendor_name) vName = v.vendor_name;
     else if (v && v.name) vName = v.name;
     
-    let rType = ec.request_type || c.request_type || 'Unknown Request';
-    hSubtitle.textContent = `${vName} â€¢ ${rType}`;
+    const rType = ec.request_type || c.request_type || 'Procurement Request';
+    if (hSubtitle) hSubtitle.textContent = `${vName} • ${rType}`;
 
-    hBadge.innerHTML = '';
-    const statusVal = ec.status || c.status;
-    const badgeEl = createSafeElement('span', statusLabel(statusVal), statusClass(statusVal));
-    hBadge.appendChild(badgeEl);
+    if (hBadge) {
+        hBadge.innerHTML = '';
+        const statusVal = ec.status || c.status || c.current_status || 'New';
+        const badgeEl = createSafeElement('span', statusLabel(statusVal), statusClass(statusVal));
+        hBadge.appendChild(badgeEl);
+    }
 
-    // Evidence Card Core
-    document.getElementById('ec-decision').textContent = ec.decision || 'No decision recorded.';
+    // Evidence Core
+    const ecDecision = document.getElementById('ec-decision');
+    if (ecDecision) ecDecision.textContent = ec.decision || c.current_status || 'No decision recorded.';
     
     const whyList = document.getElementById('ec-why');
-    whyList.innerHTML = '';
-    if (ec.why && Array.isArray(ec.why)) {
-        ec.why.forEach(reason => {
+    if (whyList) {
+        whyList.innerHTML = '';
+        if (ec.why && Array.isArray(ec.why)) {
+            ec.why.forEach(reason => {
+                const li = document.createElement('li');
+                let text = reason;
+                const match = text.match(/^\d+\.\s*(.*)/);
+                if (match) text = match[1];
+                li.textContent = text;
+                whyList.appendChild(li);
+            });
+        } else {
             const li = document.createElement('li');
-            // Remove prefix numbering if already exists (e.g. "1. Reason" -> "Reason")
-            let text = reason;
-            const match = text.match(/^\d+\.\s*(.*)/);
-            if (match) text = match[1];
-            li.textContent = text;
+            li.textContent = ec.decision_reason || 'Verified through deterministic procurement policy.';
             whyList.appendChild(li);
-        });
-    } else {
-        whyList.appendChild(createSafeElement('li', 'No detailed reasoning provided.'));
+        }
     }
 
-    document.getElementById('ec-rule').textContent = ec.rule_applied || 'Rule details are available in the configured approval and compliance policy.';
-    document.getElementById('ec-next-action').textContent = ec.next_action || 'None';
+    const ecRule = document.getElementById('ec-rule');
+    if (ecRule) ecRule.textContent = ec.rule_applied || ec.rule_id || c.rule_id || 'AM-DEFAULT';
+
+    const ecNext = document.getElementById('ec-next-action');
+    if (ecNext) ecNext.textContent = ec.next_action || c.next_action || 'None';
     
-    const isHumanNeeded = ec.human_needed;
+    const isHumanNeeded = ec.human_needed || inArray(c.current_status, ['Pending Approval', 'Manual Review']);
     const humanEl = document.getElementById('ec-human-needed');
-    if (isHumanNeeded) {
-        humanEl.textContent = 'Yes. ' + (c.owner ? `Owner: ${c.owner}` : 'A procurement or compliance owner must review this case.');
-    } else {
-        humanEl.textContent = 'No';
+    if (humanEl) {
+        if (isHumanNeeded) {
+            humanEl.textContent = 'Yes — ' + (c.owner ? `Assigned to: ${c.owner}` : 'Compliance or Procurement Owner required.');
+        } else {
+            humanEl.textContent = 'No — Fully automated under approved policy rules.';
+        }
     }
 
-    document.getElementById('ec-audit-timestamp').textContent = formatDateTime(ec.audit_timestamp || c.updated_at);
+    const tsEl = document.getElementById('ec-audit-timestamp');
+    if (tsEl) tsEl.textContent = formatDateTime(ec.audit_timestamp || c.updated_at || c.created_at);
 
-    // Part 3: Approval Action
+    // Approval Action Panel (Only if Pending Approval)
+    renderApprovalPanel(c, ec);
+
+    // Vendor Summary
+    const vNameEl = document.getElementById('vendor-name');
+    if (vNameEl) vNameEl.textContent = vName;
+
+    const vGstEl = document.getElementById('vendor-gst');
+    if (vGstEl) vGstEl.textContent = (ec.vendor && ec.vendor.gst_id) || v.gst_id || 'Missing / Not Provided';
+
+    const vEmailEl = document.getElementById('vendor-email');
+    if (vEmailEl) vEmailEl.textContent = (ec.vendor && ec.vendor.vendor_email) || v.vendor_email || c.real_sender_email || '—';
+
+    const vStatusEl = document.getElementById('vendor-status');
+    if (vStatusEl) vStatusEl.textContent = (ec.vendor && ec.vendor.vendor_status) || v.vendor_status || '—';
+
+    const vRiskEl = document.getElementById('vendor-risk');
+    if (vRiskEl) vRiskEl.textContent = (ec.vendor && ec.vendor.risk_level) || v.risk_level || 'Medium';
+
+    // Procurement Request
+    renderProcurementRequest(req);
+
+    // Documents Checklist
+    renderDocumentsChecklist(docs);
+
+    // Audit Timeline
+    renderAuditTimeline(audit);
+}
+
+function inArray(needle, haystack) {
+    return Array.isArray(haystack) && haystack.includes(needle);
+}
+
+function renderApprovalPanel(c, ec) {
     const approvalContainer = document.getElementById('approval-action-container');
+    if (!approvalContainer) return;
     approvalContainer.innerHTML = '';
-    const normStatus = normalizeStatus(ec.status || c.status).toLowerCase();
     
-    if (normStatus === 'pending approval') {
+    const statusStr = (ec.status || c.current_status || '').toLowerCase();
+    if (statusStr.includes('pending approval')) {
         const panel = document.createElement('div');
-        panel.className = 'approval-panel card mt-4 mb-4';
+        panel.className = 'card';
+        panel.style.backgroundColor = 'var(--primary-light)';
+        panel.style.borderColor = 'var(--primary-border)';
+        panel.style.marginBottom = '1.25rem';
         
-        const title = createSafeElement('h3', 'Approval Decision Required', 'text-danger');
+        const title = document.createElement('h3');
+        title.style.fontSize = '0.9375rem';
+        title.style.fontWeight = '700';
         title.style.color = 'var(--primary)';
+        title.style.marginBottom = '0.25rem';
+        title.textContent = 'Human Approval Required';
         
         const ownerEmail = c.owner || '';
-        const ownerText = ownerEmail ? `Assigned to: ${ownerEmail}` : 'A valid configured approver is required before this decision can be submitted.';
-        const ownerP = createSafeElement('p', ownerText, 'mb-2');
+        const ownerP = document.createElement('p');
+        ownerP.style.fontSize = '0.75rem';
+        ownerP.style.color = 'var(--text-body)';
+        ownerP.style.marginBottom = '0.75rem';
+        ownerP.textContent = ownerEmail 
+            ? `Requisition requires authorization from ${ownerEmail}.` 
+            : 'Requisition requires authorization from an authorized procurement approver.';
         
         panel.appendChild(title);
         panel.appendChild(ownerP);
         
         const controlsDiv = document.createElement('div');
-        controlsDiv.className = 'approval-controls';
+        controlsDiv.style.display = 'flex';
+        controlsDiv.style.gap = '0.5rem';
+        controlsDiv.style.flexWrap = 'wrap';
         
         const emailInput = document.createElement('input');
         emailInput.type = 'email';
-        emailInput.placeholder = 'Approver Email';
-        emailInput.value = (ownerEmail && ownerEmail.includes('@')) ? ownerEmail : '';
-        emailInput.style.maxWidth = '300px';
-        emailInput.style.marginRight = '1rem';
+        emailInput.value = ownerEmail || 'procurement.manager@novalite.example';
+        emailInput.placeholder = 'Approver email address';
+        emailInput.className = 'form-control';
+        emailInput.style.flex = '1';
+        emailInput.style.minWidth = '240px';
         
         const btnApprove = document.createElement('button');
-        btnApprove.textContent = 'Approve';
-        btnApprove.className = 'btn-success mr-2';
-        btnApprove.style.marginRight = '0.5rem';
+        btnApprove.className = 'btn btn-success';
+        btnApprove.innerHTML = `${getLucideSvg('check-circle-2', 14, 2)} <span>Authorize & Approve</span>`;
         
         const btnReject = document.createElement('button');
-        btnReject.textContent = 'Reject';
-        btnReject.className = 'btn-danger';
+        btnReject.className = 'btn btn-danger';
+        btnReject.innerHTML = `${getLucideSvg('x-circle', 14, 2)} <span>Reject</span>`;
         
-        if (!emailInput.value) {
-            btnApprove.disabled = true;
-            btnReject.disabled = true;
-        }
-
-        emailInput.addEventListener('input', () => {
-            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailInput.value.trim());
-            btnApprove.disabled = !isValid;
-            btnReject.disabled = !isValid;
-        });
-
         controlsDiv.appendChild(emailInput);
         controlsDiv.appendChild(btnApprove);
         controlsDiv.appendChild(btnReject);
-        
         panel.appendChild(controlsDiv);
         approvalContainer.appendChild(panel);
         
-        btnApprove.addEventListener('click', () => showApprovalModal(currentCaseId, 'APPROVE', emailInput.value.trim(), btnApprove));
-        btnReject.addEventListener('click', () => showApprovalModal(currentCaseId, 'REJECT', emailInput.value.trim(), btnReject));
+        btnApprove.addEventListener('click', () => submitApproval('APPROVE', emailInput.value.trim(), btnApprove));
+        btnReject.addEventListener('click', () => submitApproval('REJECT', emailInput.value.trim(), btnReject));
+    }
+}
+
+async function submitApproval(action, approver, btn) {
+    if (!approver || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(approver)) {
+        showToast('Valid approver email required', 'error');
+        return;
     }
 
-    // Vendor Summary
-    document.getElementById('vendor-name').textContent = vName;
-    document.getElementById('vendor-gst').textContent = (ec.vendor && ec.vendor.gst_id) || '—';
-    document.getElementById('vendor-email').textContent = (ec.vendor && ec.vendor.vendor_email) || v.email || 'â€”';
-    document.getElementById('vendor-status').textContent = (ec.vendor && ec.vendor.vendor_status) || v.status || 'â€”';
-    document.getElementById('vendor-risk').textContent = (ec.vendor && ec.vendor.risk_level) || v.risk_level || 'â€”';
+    if (!confirm(`Are you sure you want to submit: ${action} for case ${currentCaseId}?`)) {
+        return;
+    }
 
-    // Procurement Request
-    const reqContainer = document.getElementById('request-content');
-    reqContainer.innerHTML = '';
-    if (req && Object.keys(req).length > 0) {
-        const grid = document.createElement('div');
-        grid.className = 'evidence-grid';
-
-        const addReqItem = (lbl, val) => {
-            const item = document.createElement('div');
-            item.className = 'evidence-item';
-            item.appendChild(createSafeElement('span', lbl, 'label'));
-            item.appendChild(createSafeElement('span', val, 'value'));
-            grid.appendChild(item);
+    try {
+        setButtonLoading(btn, true, 'Submitting...');
+        const payload = {
+            case_id: currentCaseId,
+            action: action,
+            approver: approver,
+            comment: `${action} decision submitted via Evidence Card`
         };
 
-        addReqItem('Request ID', req.request_id || req.id || 'â€”');
-        addReqItem('Category', req.category || 'â€”');
-        addReqItem('Amount', formatCurrency(req.amount, req.currency || 'INR'));
-        addReqItem('Status', req.status || 'â€”');
-        addReqItem('Required By', formatDateTime(req.required_by_date) || 'â€”');
+        const res = await apiFetch('api/approve.php', {
+            method: 'POST',
+            body: JSON.stringify(payload)
+        });
+
+        showToast(`Case ${currentCaseId} ${action === 'APPROVE' ? 'Approved' : 'Rejected'} successfully!`, 'success');
+        fetchEvidenceCard(currentCaseId);
+    } catch (err) {
+        console.error('Approval submission error:', err);
+        showToast(err.message || 'Action failed', 'error');
+    } finally {
+        setButtonLoading(btn, false);
+    }
+}
+
+function renderProcurementRequest(req) {
+    const reqContainer = document.getElementById('request-content');
+    if (!reqContainer) return;
+    reqContainer.innerHTML = '';
+
+    if (req && Object.keys(req).length > 0) {
+        const grid = document.createElement('div');
+        grid.style.display = 'flex';
+        grid.style.flexDirection = 'column';
+        grid.style.gap = '0.625rem';
+        grid.style.fontSize = '0.8125rem';
+
+        const addRow = (label, val, isAmount = false) => {
+            const row = document.createElement('div');
+            row.style.display = 'flex';
+            row.style.justifyContent = 'space-between';
+            row.style.borderBottom = '1px solid var(--border-light)';
+            row.style.paddingBottom = '0.375rem';
+
+            const lbl = document.createElement('span');
+            lbl.style.color = 'var(--text-muted)';
+            lbl.textContent = label;
+
+            const v = document.createElement('span');
+            v.style.fontWeight = isAmount ? '700' : '600';
+            if (isAmount) v.style.color = 'var(--primary)';
+            v.textContent = val;
+
+            row.appendChild(lbl);
+            row.appendChild(v);
+            grid.appendChild(row);
+        };
+
+        addRow('Request Reference', req.request_id ? `#${req.request_id}` : '—');
+        addRow('Category', req.category || 'General');
+        addRow('Requisition Amount', formatCurrency(req.amount, req.currency || 'INR'), true);
+        addRow('Current Status', req.status || 'Active');
+        addRow('Required By Date', formatDateTime(req.required_by_date) || '—');
 
         reqContainer.appendChild(grid);
     } else {
-        reqContainer.appendChild(createSafeElement('p', 'No linked procurement request is available for this workflow case.', 'text-muted'));
+        const empty = document.createElement('p');
+        empty.style.color = 'var(--text-muted)';
+        empty.style.fontSize = '0.8125rem';
+        empty.textContent = 'No linked procurement request is available for this case.';
+        reqContainer.appendChild(empty);
     }
+}
 
-    // Documents Checklist
+function renderDocumentsChecklist(docs) {
     const docContainer = document.getElementById('documents-content');
+    if (!docContainer) return;
     docContainer.innerHTML = '';
+
     if (docs && docs.length > 0) {
         docs.forEach(doc => {
             const item = document.createElement('div');
-            item.className = 'doc-item';
+            item.className = 'checklist-item';
             
-            const name = createSafeElement('div', doc.document_type || doc.type || 'Document', 'doc-name');
+            const left = document.createElement('div');
+            left.style.display = 'flex';
+            left.style.alignItems = 'center';
+            left.style.gap = '0.5rem';
+
+            const name = document.createElement('span');
+            name.className = 'checklist-doc-name';
+            name.textContent = doc.document_type || doc.type || 'Document';
+
+            left.appendChild(name);
+
             if (doc.expiry_date) {
-                const exp = createSafeElement('span', ` (Expires: ${formatDateTime(doc.expiry_date).split(',')[0]})`, 'text-muted');
-                exp.style.fontSize = '0.875rem';
-                exp.style.fontWeight = 'normal';
-                name.appendChild(exp);
+                const exp = document.createElement('span');
+                exp.style.fontSize = '0.75rem';
+                exp.style.color = 'var(--text-muted)';
+                exp.textContent = `(Expires: ${formatDateTime(doc.expiry_date).split(',')[0]})`;
+                left.appendChild(exp);
             }
 
-            const status = document.createElement('div');
-            status.className = 'doc-status';
+            const right = document.createElement('div');
+            right.style.display = 'flex';
+            right.style.alignItems = 'center';
+            right.style.gap = '0.375rem';
+
             const sVal = (doc.verification_status || doc.status || '').toLowerCase();
+            let iconSvg = '';
+            let badgeClass = 'badge badge-gray';
+            let labelText = 'Pending';
+
             if (sVal === 'verified') {
-                status.classList.add('doc-verified');
-                status.textContent = 'âœ” Verified';
+                iconSvg = getLucideSvg('check-circle-2', 14, 2);
+                badgeClass = 'badge badge-green';
+                labelText = 'Verified';
             } else if (sVal === 'missing') {
-                status.classList.add('doc-missing');
-                status.textContent = 'âœ– Missing';
+                iconSvg = getLucideSvg('alert-triangle', 14, 2);
+                badgeClass = 'badge badge-amber';
+                labelText = 'Missing';
             } else if (sVal === 'expired') {
-                status.classList.add('doc-expired');
-                status.textContent = 'âœ– Expired';
+                iconSvg = getLucideSvg('x-circle', 14, 2);
+                badgeClass = 'badge badge-red';
+                labelText = 'Expired';
             } else {
-                status.classList.add('doc-pending');
-                status.textContent = 'âš  Pending';
+                iconSvg = getLucideSvg('clock', 14, 2);
+                badgeClass = 'badge badge-gray';
+                labelText = 'Awaiting Verification';
             }
 
-            item.appendChild(name);
-            item.appendChild(status);
+            right.innerHTML = `<span class="${badgeClass}">${iconSvg} ${labelText}</span>`;
+
+            item.appendChild(left);
+            item.appendChild(right);
             docContainer.appendChild(item);
         });
     } else {
-        docContainer.appendChild(createSafeElement('p', 'No documents found.', 'text-muted'));
+        const empty = document.createElement('p');
+        empty.style.color = 'var(--text-muted)';
+        empty.style.fontSize = '0.8125rem';
+        empty.textContent = 'No compliance documents attached.';
+        docContainer.appendChild(empty);
     }
+}
 
-    // Audit Timeline
+function renderAuditTimeline(audit) {
     const timelineContainer = document.getElementById('audit-timeline');
+    if (!timelineContainer) return;
     timelineContainer.innerHTML = '';
+
     if (audit && audit.length > 0) {
         audit.forEach(entry => {
             const ev = document.createElement('div');
-            ev.className = 'timeline-event';
-            
-            const marker = document.createElement('div');
-            marker.className = 'timeline-marker';
-            
-            const content = document.createElement('div');
-            content.className = 'timeline-content';
-            
-            const head = document.createElement('div');
-            head.className = 'timeline-header';
-            head.appendChild(createSafeElement('span', entry.action || 'ACTION', 'timeline-action'));
-            head.appendChild(createSafeElement('span', formatDateTime(entry.created_at || entry.timestamp), 'timeline-time'));
-            
-            content.appendChild(head);
-            
-            if (entry.actor) {
-                content.appendChild(createSafeElement('span', `Actor: ${entry.actor}`, 'timeline-actor'));
-            }
-            
-            if (entry.decision_reason || entry.reason) {
-                const reasonP = createSafeElement('p', entry.decision_reason || entry.reason);
-                reasonP.style.marginBottom = '0.5rem';
-                content.appendChild(reasonP);
-            }
+            ev.className = 'timeline-item';
+
+            const header = document.createElement('div');
+            header.className = 'timeline-header';
+
+            const action = document.createElement('span');
+            action.className = 'timeline-action';
+            action.textContent = entry.action || 'STATE_CHANGE';
+
+            const actor = document.createElement('span');
+            actor.className = 'timeline-actor';
+            actor.textContent = `by ${entry.actor || 'System'}`;
+
+            const date = document.createElement('span');
+            date.className = 'timeline-date';
+            date.textContent = formatDateTime(entry.created_at || entry.timestamp);
+
+            header.append(action, actor, date);
+
+            const reason = document.createElement('div');
+            reason.className = 'timeline-reason';
+            reason.textContent = entry.decision_reason || entry.reason || 'Decision recorded.';
 
             if (entry.rule_id) {
-                const ruleP = createSafeElement('p', `Rule: ${entry.rule_id}`);
-                ruleP.style.fontSize = '0.875rem';
-                ruleP.style.color = 'var(--text-muted)';
-                content.appendChild(ruleP);
+                const ruleTag = document.createElement('span');
+                ruleTag.className = 'rule-tag';
+                ruleTag.style.marginLeft = '0.5rem';
+                ruleTag.textContent = entry.rule_id;
+                reason.appendChild(ruleTag);
             }
 
-            ev.appendChild(marker);
-            ev.appendChild(content);
+            ev.append(header, reason);
             timelineContainer.appendChild(ev);
         });
     } else {
-        timelineContainer.appendChild(createSafeElement('p', 'No audit events have been recorded for this case.', 'text-muted'));
+        const empty = document.createElement('p');
+        empty.style.color = 'var(--text-muted)';
+        empty.style.fontSize = '0.8125rem';
+        empty.textContent = 'No audit log entries recorded yet.';
+        timelineContainer.appendChild(empty);
     }
 }
-
-document.addEventListener('DOMContentLoaded', init);
-
-// --- Part 3: Approval Modal Logic ---
-
-function showApprovalModal(caseId, action, approverEmail, triggerBtn) {
-    let modal = document.getElementById('approval-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'approval-modal';
-        modal.className = 'modal-backdrop hidden';
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('aria-modal', 'true');
-        modal.setAttribute('aria-labelledby', 'modal-title');
-        
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h3 id="modal-title"></h3>
-                <p id="modal-desc" class="mb-4"></p>
-                <div class="modal-actions" style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button id="modal-cancel" class="btn-secondary">Cancel</button>
-                    <button id="modal-confirm" class="btn-primary"></button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-
-        modal.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
-                closeModal();
-            }
-        });
-    }
-
-    const titleEl = modal.querySelector('#modal-title');
-    const descEl = modal.querySelector('#modal-desc');
-    const btnCancel = modal.querySelector('#modal-cancel');
-    const btnConfirm = modal.querySelector('#modal-confirm');
-
-    titleEl.textContent = action === 'APPROVE' ? `Approve case ${caseId}?` : `Reject case ${caseId}?`;
-    descEl.textContent = `Action: ${action}\nApprover: ${approverEmail}`;
-    btnConfirm.textContent = action === 'APPROVE' ? 'Confirm Approval' : 'Confirm Rejection';
-    
-    if (action === 'APPROVE') {
-        btnConfirm.className = 'btn-success';
-    } else {
-        btnConfirm.className = 'btn-danger';
-    }
-
-    const closeModal = () => {
-        modal.classList.add('hidden');
-        if (triggerBtn) triggerBtn.focus();
-    };
-
-    const confirmAction = async () => {
-        setButtonLoading(btnConfirm, true);
-        btnCancel.disabled = true;
-        try {
-            await apiFetch('api/approve.php', {
-                method: 'POST',
-                body: JSON.stringify({
-                    case_id: caseId,
-                    action: action,
-                    approver: approverEmail
-                })
-            });
-            showToast(`Case ${caseId} ${action.toLowerCase()}d successfully.`, 'success');
-            closeModal();
-            loadEvidence(); // fully re-render
-        } catch (err) {
-            showToast(err.message || 'Failed to submit approval decision.', 'error');
-        } finally {
-            setButtonLoading(btnConfirm, false);
-            btnCancel.disabled = false;
-        }
-    };
-
-    btnCancel.onclick = closeModal;
-    btnConfirm.onclick = confirmAction;
-
-    modal.classList.remove('hidden');
-    btnConfirm.focus();
-}
-

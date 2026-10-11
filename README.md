@@ -1,8 +1,6 @@
-# CipherTrace — by Team CipherSight
+# Novalite
 
-**CipherTrace** is an explainable AI procurement assistant. It parses messy, forwarded procurement emails, works out **who really sent them**, verifies vendor compliance rules in MySQL, and routes every case into one of **four deterministic outcomes**, backed by an immutable audit trail and a plain-English Evidence Card.
-
-> *"Decode the sender. Trace the decision. Secure the spend."*
+Novalite reads procurement e-mails, works out **who really sent them**, classifies the request, checks the vendor against rules stored in MySQL, and lands every case in exactly one of **four outcomes**, with an audit trail and a plain-English Evidence Card.
 
 | Outcome (stored `current_status`) | Shown in API as | Meaning |
 |---|---|---|

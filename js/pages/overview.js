@@ -1,10 +1,10 @@
 /**
  * js/pages/overview.js
  * Drives the Executive Operations Overview Dashboard (Screen A)
+ * Clean enterprise data presentation with zero artificial visual fluff.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Mobile sidebar toggle
   const menuToggle = document.getElementById('menu-toggle');
   const sidebar = document.getElementById('app-sidebar');
   if (menuToggle && sidebar) {
@@ -48,8 +48,8 @@ function renderRecentCases(cases) {
     td.colSpan = 4;
     td.style.textAlign = 'center';
     td.style.padding = '2rem';
-    td.style.color = '#64748b';
-    td.textContent = 'No cases found.';
+    td.style.color = 'var(--text-muted)';
+    td.textContent = 'No cases recorded.';
     tr.appendChild(td);
     tbody.appendChild(tr);
     return;
@@ -75,7 +75,7 @@ function renderRecentCases(cases) {
     const link = document.createElement('a');
     link.href = `evidence.html?id=${encodeURIComponent(c.case_id)}`;
     link.className = 'btn btn-secondary btn-sm';
-    link.textContent = 'Evidence Card';
+    link.innerHTML = `<span>Evidence Card</span> ${getLucideSvg('chevron-right', 12, 2)}`;
     tdAction.appendChild(link);
 
     tr.appendChild(tdId);
@@ -98,8 +98,8 @@ function renderPendingQueue(queue) {
     const empty = document.createElement('div');
     empty.style.textAlign = 'center';
     empty.style.padding = '2rem';
-    empty.style.color = '#64748b';
-    empty.textContent = 'No pending approvals in queue. All clean!';
+    empty.style.color = 'var(--text-muted)';
+    empty.textContent = 'No pending approvals in queue.';
     container.appendChild(empty);
     return;
   }
@@ -108,21 +108,21 @@ function renderPendingQueue(queue) {
     const card = document.createElement('div');
     card.style.border = '1px solid var(--border)';
     card.style.borderRadius = 'var(--radius-md)';
-    card.style.padding = '0.875rem 1rem';
+    card.style.padding = '0.75rem 0.875rem';
     card.style.backgroundColor = '#ffffff';
     card.style.display = 'flex';
     card.style.justifyContent = 'space-between';
     card.style.alignItems = 'center';
-    card.style.gap = '1rem';
+    card.style.gap = '0.75rem';
 
     const left = document.createElement('div');
     const title = document.createElement('div');
-    title.style.fontWeight = '700';
-    title.style.fontSize = '0.875rem';
+    title.style.fontWeight = '600';
+    title.style.fontSize = '0.8125rem';
     title.textContent = `${item.case_id} — ${item.vendor_name || item.real_sender_email}`;
 
     const sub = document.createElement('div');
-    sub.style.fontSize = '0.75rem';
+    sub.style.fontSize = '0.6875rem';
     sub.style.color = 'var(--text-muted)';
     sub.textContent = `${item.category || 'General'} • Amount: ${formatCurrency(item.amount, 'INR')} • Approver: ${item.owner}`;
 
@@ -132,7 +132,7 @@ function renderPendingQueue(queue) {
     const right = document.createElement('a');
     right.href = `evidence.html?id=${encodeURIComponent(item.case_id)}`;
     right.className = 'btn btn-primary btn-sm';
-    right.textContent = 'Sign / Review';
+    right.innerHTML = `<span>Review</span> ${getLucideSvg('arrow-right', 12, 2)}`;
 
     card.appendChild(left);
     card.appendChild(right);
@@ -150,7 +150,7 @@ function renderFollowUps(followUps) {
     td.colSpan = 5;
     td.style.textAlign = 'center';
     td.style.padding = '2rem';
-    td.style.color = '#64748b';
+    td.style.color = 'var(--text-muted)';
     td.textContent = 'No pending document follow-ups scheduled.';
     tr.appendChild(td);
     tbody.appendChild(tr);
@@ -174,14 +174,14 @@ function renderFollowUps(followUps) {
     tdDue.appendChild(dueBadge);
 
     const tdAction = document.createElement('td');
-    tdAction.style.fontSize = '0.8125rem';
+    tdAction.style.fontSize = '0.75rem';
     tdAction.textContent = f.next_action || 'Follow up with vendor for missing compliance';
 
     const tdLink = document.createElement('td');
     const link = document.createElement('a');
     link.href = `evidence.html?id=${encodeURIComponent(f.case_id)}`;
     link.className = 'btn btn-secondary btn-sm';
-    link.textContent = 'Open Case';
+    link.innerHTML = `<span>Open</span> ${getLucideSvg('chevron-right', 12, 2)}`;
     tdLink.appendChild(link);
 
     tr.appendChild(tdId);

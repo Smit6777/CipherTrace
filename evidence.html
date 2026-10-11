@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -22,49 +22,51 @@
       <nav class="sidebar-nav">
         <span class="nav-section-label">Operations</span>
         <a href="index.html">
-          <span class="nav-icon">📊</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
           <span>Overview</span>
         </a>
         <a href="cases.html">
-          <span class="nav-icon">📂</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
           <span>Workflow Cases</span>
         </a>
-        <a href="evidence.html" class="active">
-          <span class="nav-icon">🗂</span>
+        <a href="evidence.html" class="active" aria-current="page">
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
           <span>Evidence Cards</span>
         </a>
 
         <span class="nav-section-label">Compliance & Control</span>
         <a href="settings.html">
-          <span class="nav-icon">⚙️</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
           <span>Approval Matrix</span>
         </a>
         <a href="vendors.html">
-          <span class="nav-icon">🏢</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
           <span>Vendors & Compliance</span>
         </a>
         <a href="audit.html">
-          <span class="nav-icon">📜</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
           <span>Audit Trail</span>
         </a>
 
-        <span class="nav-section-label">Development</span>
+        <span class="nav-section-label">Testing & Sandbox</span>
         <a href="test.html">
-          <span class="nav-icon">🧪</span>
+          <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.1 19.34A2 2 0 0 0 5.76 22h12.48a2 2 0 0 0 1.66-2.66L14 9.31V2"/><line x1="8.5" x2="15.5" y1="2" y2="2"/><line x1="8.5" x2="15.5" y1="14" y2="14"/></svg>
           <span>Testing Lab</span>
         </a>
       </nav>
 
       <div class="sidebar-footer">
-        <div>CipherTrace Engine v1.2</div>
-        <div style="font-size: 0.6875rem; color: #475569; margin-top: 2px;">Audit First • Zero Trust</div>
+        <div>Engine Status: Operational</div>
+        <div style="font-size: 0.625rem; color: #475569;">v1.2.0 • MySQL Verified</div>
       </div>
     </aside>
 
     <div class="app-main-wrapper">
       <header class="app-topbar">
         <div class="topbar-left">
-          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          </button>
           <div class="topbar-breadcrumbs">
             <a href="cases.html">Workflow Cases</a>
             <span class="separator">/</span>
@@ -86,21 +88,25 @@
       <main class="page-content">
         <!-- Missing ID State -->
         <div id="missing-id-state" class="card" style="text-align: center; padding: 3rem 1rem; display: none;">
-          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔍</div>
-          <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">Case ID Required</h2>
-          <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Select a case from the Workflow Cases list to view its audit Evidence Card.</p>
+          <div style="color: var(--text-muted); margin-bottom: 0.75rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">Case Reference Required</h2>
+          <p style="color: var(--text-muted); font-size: 0.8125rem; margin-bottom: 1.25rem;">Select a case from the Workflow Cases list to review its complete compliance and decision evidence.</p>
           <a href="cases.html" class="btn btn-primary">Browse Cases →</a>
         </div>
 
         <!-- Loading State -->
         <div id="loading-state" class="card" style="text-align: center; padding: 3rem 1rem; display: none;">
-          <div style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem;">Loading Evidence Card...</div>
-          <p style="color: var(--text-muted); font-size: 0.8125rem;">Fetching real-time compliance checks and audit history from Novalite.</p>
+          <div style="color: var(--primary); font-weight: 600; margin-bottom: 0.375rem;">Loading Evidence Card...</div>
+          <p style="color: var(--text-muted); font-size: 0.75rem;">Verifying vendor compliance, approval policy, and audit trail.</p>
         </div>
 
         <!-- Error State -->
         <div id="error-state" class="card" style="text-align: center; padding: 3rem 1rem; display: none;">
-          <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</div>
+          <div style="color: var(--danger-text); margin-bottom: 0.5rem;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          </div>
           <p class="error-text" id="error-message" style="color: var(--danger-text); font-weight: 600; margin-bottom: 1rem;">
             Unable to load Evidence Card.
           </p>
@@ -113,9 +119,9 @@
           <div class="evidence-hero-banner">
             <div class="evidence-hero-top">
               <div>
-                <span class="evidence-id-label">CipherTrace Evidence Record</span>
+                <span class="evidence-id-label">Compliance & Decision Record</span>
                 <h1 class="evidence-hero-title" id="header-case-id">Case ID</h1>
-                <p style="color: #cbd5e1; font-size: 0.875rem;" id="header-subtitle">Vendor Name • Request Type</p>
+                <p style="color: #cbd5e1; font-size: 0.8125rem;" id="header-subtitle">Vendor Name • Request Type</p>
               </div>
               <div id="header-badge-container"></div>
             </div>
@@ -123,79 +129,85 @@
             <div class="evidence-hero-meta">
               <div>
                 <span style="font-size: 0.6875rem; text-transform: uppercase; color: #94a3b8; display: block;">Decision Engine</span>
-                <span style="font-weight: 600;">CipherTrace Engine (CipherSight)</span>
+                <span style="font-weight: 600;">CipherTrace Deterministic Engine</span>
               </div>
               <div>
-                <span style="font-size: 0.6875rem; text-transform: uppercase; color: #94a3b8; display: block;">Verification Status</span>
-                <span style="font-weight: 600;" id="hero-verification-text">Cryptographically Logged</span>
+                <span style="font-size: 0.6875rem; text-transform: uppercase; color: #94a3b8; display: block;">Audit Record</span>
+                <span style="font-weight: 600;">Logged in MySQL audit_log</span>
               </div>
               <div>
                 <span style="font-size: 0.6875rem; text-transform: uppercase; color: #94a3b8; display: block;">Audit Timestamp</span>
-                <span style="font-weight: 600;" id="ec-timestamp">—</span>
+                <span style="font-weight: 600;" id="ec-audit-timestamp">—</span>
               </div>
             </div>
           </div>
 
-          <!-- Approval Action Container (Part 3 Injection) -->
+          <!-- Approval Action Container (Rendered when Pending Approval) -->
           <div id="approval-action-container"></div>
 
-          <!-- The 6 Mandatory Evidence Sections -->
+          <!-- Decision Matrix Grid -->
           <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">Explainable Decision Matrix</h2>
+            <div class="card-header">
+              <h2 class="card-title">Decision Rationale & Next Steps</h2>
+            </div>
             <div class="evidence-section-grid">
               <div class="evidence-block">
-                <div class="evidence-block-label">A. Decision Outcome</div>
+                <div class="evidence-block-label">1. Primary Outcome</div>
                 <div id="ec-decision" class="evidence-block-value" style="font-weight: 700; color: var(--primary);">—</div>
               </div>
 
               <div class="evidence-block">
-                <div class="evidence-block-label">B. Explanation ("Why")</div>
-                <div id="ec-why" class="evidence-block-value">—</div>
-              </div>
-
-              <div class="evidence-block">
-                <div class="evidence-block-label">C. Policy Rule Applied</div>
+                <div class="evidence-block-label">2. Triggered Policy Rule</div>
                 <div class="evidence-block-value">
                   <span id="ec-rule" class="rule-tag">—</span>
                 </div>
               </div>
 
               <div class="evidence-block">
-                <div class="evidence-block-label">D. Next Operational Action</div>
-                <div id="ec-next" class="evidence-block-value">—</div>
+                <div class="evidence-block-label">3. Next Action Required</div>
+                <div id="ec-next-action" class="evidence-block-value">—</div>
               </div>
 
               <div class="evidence-block">
-                <div class="evidence-block-label">E. Human Needed?</div>
-                <div id="ec-human" class="evidence-block-value" style="font-weight: 600;">—</div>
+                <div class="evidence-block-label">4. Human Authorization Needed?</div>
+                <div id="ec-human-needed" class="evidence-block-value" style="font-weight: 600;">—</div>
               </div>
+            </div>
+
+            <div style="margin-top: 1rem; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+              <div class="evidence-block-label">5. Detailed Explanation ("Why")</div>
+              <ul id="ec-why" style="margin-left: 1.25rem; font-size: 0.8125rem; color: var(--text-body); display: flex; flex-direction: column; gap: 0.25rem;">
+                <li>No detailed reasoning provided.</li>
+              </ul>
             </div>
           </div>
 
           <!-- Two-column info grid -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.25rem; margin-bottom: 1.25rem;">
             <!-- Vendor Summary -->
             <div class="card" style="margin-bottom: 0;">
-              <h2 class="card-title" style="margin-bottom: 1rem;">Vendor Summary</h2>
-              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Vendor Name</span>
+              <div class="card-header">
+                <h2 class="card-title">Vendor Summary</h2>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.625rem; font-size: 0.8125rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.375rem;">
+                  <span style="color: var(--text-muted);">Vendor Name</span>
                   <span id="vendor-name" style="font-weight: 600;">—</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">GST Identification</span>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.375rem;">
+                  <span style="color: var(--text-muted);">GST Identification</span>
                   <span id="vendor-gst" style="font-family: monospace; font-weight: 600;">—</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Vendor Email</span>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.375rem;">
+                  <span style="color: var(--text-muted);">Vendor Email</span>
                   <span id="vendor-email">—</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Vendor Status</span>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.375rem;">
+                  <span style="color: var(--text-muted);">Vendor Status</span>
                   <span id="vendor-status" style="font-weight: 600;">—</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Risk Level</span>
+                  <span style="color: var(--text-muted);">Risk Level</span>
                   <span id="vendor-risk" style="font-weight: 600;">—</span>
                 </div>
               </div>
@@ -203,40 +215,31 @@
 
             <!-- Procurement Request Panel -->
             <div class="card" style="margin-bottom: 0;">
-              <h2 class="card-title" style="margin-bottom: 1rem;">Procurement Request</h2>
-              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Request ID</span>
-                  <span id="pr-request-id" style="font-family: monospace; font-weight: 600;">—</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Category</span>
-                  <span id="pr-category" style="font-weight: 600;">—</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-light); padding-bottom: 0.5rem;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Requisition Amount</span>
-                  <span id="pr-amount" style="font-weight: 700; color: var(--primary);">—</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                  <span style="color: var(--text-muted); font-size: 0.8125rem;">Required By Date</span>
-                  <span id="pr-required-date">—</span>
-                </div>
+              <div class="card-header">
+                <h2 class="card-title">Procurement Request</h2>
+              </div>
+              <div id="request-content">
+                <!-- Injected by evidence.js -->
               </div>
             </div>
           </div>
 
           <!-- Document Checklist & Compliance -->
           <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">Mandatory Compliance Document Checklist</h2>
-            <div id="document-checklist" class="checklist-group">
+            <div class="card-header">
+              <h2 class="card-title">Mandatory Compliance Document Checklist</h2>
+            </div>
+            <div id="documents-content" class="checklist-group">
               <!-- Checklist injected by evidence.js -->
             </div>
           </div>
 
           <!-- Immutable Audit Trail Timeline -->
           <div class="card">
-            <h2 class="card-title" style="margin-bottom: 1rem;">Immutable Audit Timeline</h2>
-            <div id="timeline-container" class="timeline">
+            <div class="card-header">
+              <h2 class="card-title">Immutable Audit Timeline</h2>
+            </div>
+            <div id="audit-timeline" class="timeline">
               <!-- Timeline steps injected by evidence.js -->
             </div>
           </div>
@@ -251,4 +254,3 @@
   <script src="js/pages/evidence.js"></script>
 </body>
 </html>
-
