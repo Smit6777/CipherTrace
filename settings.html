@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherTrace - Approval Matrix</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper">
+          <div class="brand-logo-icon">C</div>
+          <div class="brand-info">
+            <span class="brand-title">CipherTrace</span>
+            <span class="brand-subtitle">by CipherSight</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Operations</span>
+        <a href="index.html">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+        <a href="cases.html">
+          <span class="nav-icon">📂</span>
+          <span>Workflow Cases</span>
+        </a>
+        <a href="evidence.html">
+          <span class="nav-icon">🗂</span>
+          <span>Evidence Cards</span>
+        </a>
+
+        <span class="nav-section-label">Compliance & Control</span>
+        <a href="settings.html" class="active">
+          <span class="nav-icon">⚙️</span>
+          <span>Approval Matrix</span>
+        </a>
+        <a href="vendors.html">
+          <span class="nav-icon">🏢</span>
+          <span>Vendors & Compliance</span>
+        </a>
+        <a href="audit.html">
+          <span class="nav-icon">📜</span>
+          <span>Audit Trail</span>
+        </a>
+
+        <span class="nav-section-label">Development</span>
+        <a href="test.html">
+          <span class="nav-icon">🧪</span>
+          <span>Testing Lab</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>CipherTrace Engine v1.2</div>
+        <div style="font-size: 0.6875rem; color: #475569; margin-top: 2px;">Audit First • Zero Trust</div>
+      </div>
+    </aside>
+
+    <div class="app-main-wrapper">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+          <div class="topbar-breadcrumbs">
+            <a href="index.html">CipherTrace</a>
+            <span class="separator">/</span>
+            <span class="current">Approval Matrix</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-profile-badge">
+            <div class="user-avatar">PA</div>
+            <div class="user-details">
+              <span class="user-name">Procurement Admin</span>
+              <span class="user-role">procurement.manager@novalite.example</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">Approval Matrix Policy Configuration</h1>
+          <p class="page-subtitle">Configure spend boundaries, required roles, and automation tiers. Changes are versioned in the configuration audit log.</p>
+        </div>
+
+        <!-- Safety Notice -->
+        <div class="card" style="background-color: var(--warning-bg); border-color: var(--warning-border); padding: 1rem 1.25rem;">
+          <p style="font-size: 0.8125rem; color: var(--warning-text); margin: 0;">
+            🛡️ <strong>Safety Precedence Enforced:</strong> Blocked vendors and vendors with expired mandatory documents are automatically halted at Manual Review. No financial rule in this matrix can override that safety stop.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+          <!-- Matrix Table -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+              <h2 class="card-title">Configured Matrix Rules</h2>
+            </div>
+            <div class="table-container" style="box-shadow: none; border: none; margin-bottom: 0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rule ID</th>
+                    <th>Min Amount</th>
+                    <th>Max Amount</th>
+                    <th>Risk</th>
+                    <th>Category</th>
+                    <th>Approver Role</th>
+                    <th>Auto?</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="matrix-tbody">
+                  <tr>
+                    <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading policy rules...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="loading-state" style="display: none; text-align: center; padding: 1rem;">Loading...</div>
+          </div>
+
+          <!-- Edit Rule Form -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+              <h2 class="card-title" id="form-title">Edit Policy Rule</h2>
+            </div>
+            <p id="form-subtitle" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Select a rule to update boundaries.</p>
+
+            <form id="matrix-form" style="display: flex; flex-direction: column; gap: 0.875rem;">
+              <div class="form-group">
+                <label for="field-min-amount">Min Amount (INR)</label>
+                <input type="number" step="0.01" id="field-min-amount" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="field-max-amount">Max Amount (INR or blank for unlimited)</label>
+                <input type="number" step="0.01" id="field-max-amount" class="form-control" placeholder="No maximum limit">
+              </div>
+
+              <div class="form-group">
+                <label for="field-risk-level">Risk Level</label>
+                <select id="field-risk-level" class="form-control">
+                  <option value="Any">Any</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="field-category">Requisition Category</label>
+                <input type="text" id="field-category" class="form-control" value="Any" required>
+              </div>
+
+              <div class="form-group">
+                <label for="field-approver-email">Approver Email / Target</label>
+                <input type="text" id="field-approver-email" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="field-approval-required">Human Approval Required?</label>
+                <select id="field-approval-required" class="form-control">
+                  <option value="1">Yes (Pending Approval)</option>
+                  <option value="0">No (Auto-Processed)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="field-change-reason">Reason for Audit Change</label>
+                <input type="text" id="field-change-reason" class="form-control" placeholder="Policy threshold adjustment" required>
+              </div>
+
+              <div class="form-group">
+                <label for="field-changed-by">Authorizing Identity</label>
+                <input type="email" id="field-changed-by" class="form-control" value="procurement.manager@novalite.example" required>
+              </div>
+
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <button type="submit" id="save-rule-btn" class="btn btn-primary" style="flex: 1;">Save Changes</button>
+                <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/pages/settings.js"></script>
+</body>
+</html>
+

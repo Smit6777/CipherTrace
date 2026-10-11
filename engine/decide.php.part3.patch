@@ -1,0 +1,71 @@
+--- /home/claude/w/part2/decide.php	2026-10-10 17:00:10.000000000 +0000
++++ engine/decide.php	2026-10-10 17:08:34.505028301 +0000
+@@ -24,6 +24,7 @@
+ const NV_STATUS_PENDING_DOCS     = 'Pending Documents';
+ const NV_STATUS_PENDING_APPROVAL = 'Pending Approval';
+ const NV_STATUS_MANUAL_REVIEW    = 'Manual Review';
++const NV_STATUS_REJECTED         = 'Rejected';          // PART 3 PATCH: set by api/approve.php on REJECT
+ const NV_ACTOR                   = 'Novalite';
+ const NV_RULE_DOCS               = 'DOC-001';
+ 
+@@ -259,12 +260,12 @@
+ 
+ /* ============================== writers ============================== */
+ 
+-function insert_audit_log(mysqli $db, string $caseId, string $action, string $reason, string $ruleId, array $evidence): int
++function insert_audit_log(mysqli $db, string $caseId, string $action, string $reason, string $ruleId, array $evidence, string $actor = NV_ACTOR): int
+ {
+     $json = json_encode($evidence, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
+     [$id] = engine_exec($db,
+         'INSERT INTO audit_log (case_id, action, decision_reason, rule_id, actor, evidence) VALUES (?,?,?,?,?,?)',
+-        'ssssss', [$caseId, $action, $reason, $ruleId, NV_ACTOR, $json]);
++        'ssssss', [$caseId, $action, $reason, $ruleId, $actor, $json]);
+     return $id;
+ }
+ 
+@@ -276,15 +277,17 @@
+     return $id;
+ }
+ 
+-function update_case_state(mysqli $db, string $caseId, string $status, string $nextAction, string $owner, ?int $vendorId, ?int $requestId): void
++function update_case_state(mysqli $db, string $caseId, string $status, string $nextAction, string $owner, ?int $vendorId, ?int $requestId, ?string $followUpDue = null): void
+ {
++    // PART 3 PATCH: follow_up_due_at (structured DATE) and chase_count are persisted with the decision.
+     engine_exec($db,
+         'UPDATE workflow_cases
+             SET current_status = ?, next_action = ?, owner = ?,
++                follow_up_due_at = ?, chase_count = 0,
+                 linked_vendor_id = COALESCE(?, linked_vendor_id),
+                 linked_request_id = COALESCE(?, linked_request_id)
+           WHERE case_id = ?',
+-        'sssiis', [$status, mb_substr($nextAction, 0, 500), mb_substr($owner, 0, 190), $vendorId, $requestId, $caseId]);
++        'ssssiis', [$status, mb_substr($nextAction, 0, 500), mb_substr($owner, 0, 190), $followUpDue, $vendorId, $requestId, $caseId]);
+ }
+ 
+ /* ============================== decision engine ============================== */
+@@ -294,12 +297,15 @@
+  * @return array decision summary (status, rule_id, owner, next_action, audit_id, mail_id, evidence ...)
+  * @throws EngineException|Throwable  (transaction rolled back)
+  */
+-function decide_case(mysqli $db, string $caseId, array $context = []): array
++function decide_case(mysqli $db, string $caseId, array $context = [], bool $inTransaction = false): array
+ {
+     $caseId = trim($caseId);
+     if ($caseId === '' || strlen($caseId) > 20) {
+         throw new EngineException('Invalid case id.', 'invalid_case_id');
+     }
++    if ($inTransaction) {   // PART 3 PATCH: caller owns the transaction (intake / cron re-evaluation)
++        return nv_decide_in_tx($db, $caseId, $context);
++    }
+     $db->begin_transaction();
+     try {
+         $result = nv_decide_in_tx($db, $caseId, $context);
+@@ -475,7 +481,7 @@
+     ];
+ 
+     /* ---- the ONE state change: case + request status, ONE audit row, ONE mail row ---- */
+-    update_case_state($db, $caseId, $status, $nextAction, $owner, $vendorId, $requestId);
++    update_case_state($db, $caseId, $status, $nextAction, $owner, $vendorId, $requestId, $followUp);
+     if ($requestId !== null) {
+         engine_exec($db, 'UPDATE procurement_requests SET status = ? WHERE request_id = ?', 'si', [$status, $requestId]);
+     }

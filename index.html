@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherTrace - Overview Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Midnight Navy Sidebar (Figma Spec) -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper">
+          <div class="brand-logo-icon">C</div>
+          <div class="brand-info">
+            <span class="brand-title">CipherTrace</span>
+            <span class="brand-subtitle">by CipherSight</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Operations</span>
+        <a href="index.html" class="active">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+        <a href="cases.html">
+          <span class="nav-icon">📂</span>
+          <span>Workflow Cases</span>
+        </a>
+        <a href="evidence.html">
+          <span class="nav-icon">🗂</span>
+          <span>Evidence Cards</span>
+        </a>
+
+        <span class="nav-section-label">Compliance & Control</span>
+        <a href="settings.html">
+          <span class="nav-icon">⚙️</span>
+          <span>Approval Matrix</span>
+        </a>
+        <a href="vendors.html">
+          <span class="nav-icon">🏢</span>
+          <span>Vendors & Compliance</span>
+        </a>
+        <a href="audit.html">
+          <span class="nav-icon">📜</span>
+          <span>Audit Trail</span>
+        </a>
+
+        <span class="nav-section-label">Development</span>
+        <a href="test.html">
+          <span class="nav-icon">🧪</span>
+          <span>Testing Lab</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>CipherTrace Engine v1.2</div>
+        <div style="font-size: 0.6875rem; color: #475569; margin-top: 2px;">Audit First • Zero Trust</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="app-main-wrapper">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+          <div class="topbar-breadcrumbs">
+            <span>CipherTrace</span>
+            <span class="separator">/</span>
+            <span class="current">Overview Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-profile-badge">
+            <div class="user-avatar">PA</div>
+            <div class="user-details">
+              <span class="user-name">Procurement Admin</span>
+              <span class="user-role">procurement.manager@novalite.example</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="page-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h1 class="page-title">Executive Operations Overview</h1>
+            <p class="page-subtitle">Every procurement decision explained. Every risk visible. Every action traceable.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="test.html" class="btn btn-primary">🧪 Simulate Inbound Email</a>
+            <a href="cases.html" class="btn btn-secondary">View All Cases →</a>
+          </div>
+        </div>
+
+        <!-- 5 Stat Cards (Figma Spec) -->
+        <div class="stat-cards-grid">
+          <div class="stat-card variant-total">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Total Cases</span>
+              <span class="stat-card-badge">📁</span>
+            </div>
+            <div class="stat-card-value" id="stat-total">0</div>
+            <div class="stat-card-subtext">Total recorded in system</div>
+          </div>
+
+          <div class="stat-card variant-warning">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Pending Documents</span>
+              <span class="stat-card-badge">⚠️</span>
+            </div>
+            <div class="stat-card-value" id="stat-pending-docs" style="color: var(--warning-text);">0</div>
+            <div class="stat-card-subtext">Awaiting vendor compliance</div>
+          </div>
+
+          <div class="stat-card variant-info">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Pending Approval</span>
+              <span class="stat-card-badge">✍️</span>
+            </div>
+            <div class="stat-card-value" id="stat-pending-approval" style="color: var(--info-text);">0</div>
+            <div class="stat-card-subtext">High-value human queue</div>
+          </div>
+
+          <div class="stat-card variant-danger">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Manual Review</span>
+              <span class="stat-card-badge">🛡️</span>
+            </div>
+            <div class="stat-card-value" id="stat-manual-review" style="color: var(--danger-text);">0</div>
+            <div class="stat-card-subtext">Blocked / expired safety stops</div>
+          </div>
+
+          <div class="stat-card variant-success">
+            <div class="stat-card-header">
+              <span class="stat-card-label">Auto-Processed</span>
+              <span class="stat-card-badge">⚡</span>
+            </div>
+            <div class="stat-card-value" id="stat-auto-processed" style="color: var(--success-text);">0</div>
+            <div class="stat-card-subtext">100% compliant & low-risk</div>
+          </div>
+        </div>
+
+        <!-- Operational Split View -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
+          <!-- Left: Recent Cases -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+              <h2 class="card-title">Recent Workflow Cases</h2>
+              <a href="cases.html" style="font-size: 0.8125rem; color: var(--primary); font-weight: 600; text-decoration: none;">View Table →</a>
+            </div>
+            <div class="table-container" style="box-shadow: none; border: none; margin-bottom: 0;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Case ID</th>
+                    <th>Vendor</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-cases-tbody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading live cases...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right: Pending Approval Queue -->
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-header">
+              <h2 class="card-title">Pending Approval Queue</h2>
+              <span class="badge badge-blue" id="queue-count-badge">0 Pending</span>
+            </div>
+            <div id="pending-queue-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading approval queue...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance & Follow-Up Watchlist -->
+        <div class="card" style="margin-top: 1.5rem; margin-bottom: 0;">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Compliance Watchlist (Upcoming Follow-up Deadlines)</h2>
+              <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Track vendors requiring document follow-up before auto-escalation.</p>
+            </div>
+            <a href="vendors.html" style="font-size: 0.8125rem; color: var(--primary); font-weight: 600; text-decoration: none;">Vendor Directory →</a>
+          </div>
+          <div class="table-container" style="box-shadow: none; border: none; margin-bottom: 0;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Case ID</th>
+                  <th>Vendor</th>
+                  <th>Follow-up Due</th>
+                  <th>Action Required</th>
+                  <th>Review</th>
+                </tr>
+              </thead>
+              <tbody id="followup-tbody">
+                <tr>
+                  <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading compliance watchlist...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/pages/overview.js"></script>
+</body>
+</html>
+

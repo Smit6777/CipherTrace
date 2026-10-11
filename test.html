@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherTrace - Testing Lab</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper">
+          <div class="brand-logo-icon">C</div>
+          <div class="brand-info">
+            <span class="brand-title">CipherTrace</span>
+            <span class="brand-subtitle">by CipherSight</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-label">Operations</span>
+        <a href="index.html">
+          <span class="nav-icon">📊</span>
+          <span>Overview</span>
+        </a>
+        <a href="cases.html">
+          <span class="nav-icon">📂</span>
+          <span>Workflow Cases</span>
+        </a>
+        <a href="evidence.html">
+          <span class="nav-icon">🗂</span>
+          <span>Evidence Cards</span>
+        </a>
+
+        <span class="nav-section-label">Compliance & Control</span>
+        <a href="settings.html">
+          <span class="nav-icon">⚙️</span>
+          <span>Approval Matrix</span>
+        </a>
+        <a href="vendors.html">
+          <span class="nav-icon">🏢</span>
+          <span>Vendors & Compliance</span>
+        </a>
+        <a href="audit.html">
+          <span class="nav-icon">📜</span>
+          <span>Audit Trail</span>
+        </a>
+
+        <span class="nav-section-label">Development</span>
+        <a href="test.html" class="active">
+          <span class="nav-icon">🧪</span>
+          <span>Testing Lab</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div>CipherTrace Engine v1.2</div>
+        <div style="font-size: 0.6875rem; color: #475569; margin-top: 2px;">Audit First • Zero Trust</div>
+      </div>
+    </aside>
+
+    <div class="app-main-wrapper">
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu-toggle" id="menu-toggle" aria-label="Toggle Navigation">☰</button>
+          <div class="topbar-breadcrumbs">
+            <a href="index.html">CipherTrace</a>
+            <span class="separator">/</span>
+            <span class="current">Testing Lab</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-profile-badge">
+            <div class="user-avatar">PA</div>
+            <div class="user-details">
+              <span class="user-name">Procurement Admin</span>
+              <span class="user-role">procurement.manager@novalite.example</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">Procurement Email Testing Lab</h1>
+          <p class="page-subtitle">Inject realistic procurement emails to validate real-sender identity parsing, compliance checks, matrix evaluation, and audit trail generation.</p>
+        </div>
+
+        <!-- 3 Scenario Preset Buttons (Figma Spec) -->
+        <div class="card" style="background-color: var(--primary-light); border-color: #c7d2fe;">
+          <h2 class="card-title" style="color: var(--primary); font-size: 0.9375rem; margin-bottom: 0.5rem;">⚡ Quick Demo Scenarios (One-Click Test Injectors)</h2>
+          <p style="font-size: 0.8125rem; color: #4338ca; margin-bottom: 1rem;">Click any scenario below to immediately pre-fill the form with verified evaluator test data:</p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button type="button" id="btn-load-scenario-a" class="btn btn-secondary" style="font-size: 0.8125rem;">
+              ⚠️ Scenario A: Missing GST (BlueRiver Logistics)
+            </button>
+            <button type="button" id="btn-load-scenario-b" class="btn btn-secondary" style="font-size: 0.8125rem;">
+              ✍️ Scenario B: ₹3,25,000 High-Value (Apex Supplies)
+            </button>
+            <button type="button" id="btn-load-scenario-c" class="btn btn-secondary" style="font-size: 0.8125rem;">
+              🛡️ Scenario C: Blocked Vendor Safety Halt (Dunmore)
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem;">
+          <!-- Intake Form -->
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom: 1rem;">Simulate Inbound Email</h2>
+            <form id="intake-form" style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="form-group">
+                <label for="thread-id">Thread ID</label>
+                <input type="text" id="thread-id" class="form-control" placeholder="DEMO-THREAD-001" required>
+              </div>
+
+              <div class="form-group">
+                <label for="physical-sender">Physical Sender (Pack Mailbox)</label>
+                <input type="email" id="physical-sender" class="form-control" value="pack-mailbox@controlled.example" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email-subject">Subject</label>
+                <input type="text" id="email-subject" class="form-control" placeholder="Procurement Request" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email-body">Raw Email Body</label>
+                <div style="font-size: 0.6875rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+                  Rule: First non-empty line must declare the real sender format: <code>On behalf of: Name &lt;email&gt;</code>
+                </div>
+                <textarea id="email-body" class="form-control" rows="8" style="font-family: monospace; font-size: 0.8125rem; resize: vertical;" required></textarea>
+              </div>
+
+              <button type="submit" id="submit-btn" class="btn btn-primary" style="height: 42px;">
+                🚀 Process Email Through Novalite
+              </button>
+            </form>
+          </div>
+
+          <!-- Live Result Output -->
+          <div class="card">
+            <h2 class="card-title" style="margin-bottom: 1rem;">Engine Decision & Evidence</h2>
+            
+            <div id="result-empty" style="text-align: center; color: var(--text-muted); padding: 4rem 1rem;">
+              <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📥</div>
+              <p>Submit an email or load a demo scenario to see Novalite's real-time decision engine output.</p>
+            </div>
+
+            <div id="result-container" style="display: none; flex-direction: column; gap: 1rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+                <div>
+                  <div style="font-size: 0.6875rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Case Created</div>
+                  <div id="res-case-id" style="font-size: 1.25rem; font-weight: 800; color: var(--primary); font-family: monospace;">—</div>
+                </div>
+                <div id="res-status-badge">—</div>
+              </div>
+
+              <div class="evidence-block">
+                <div class="evidence-block-label">Extracted Real Sender</div>
+                <div id="res-real-sender" class="evidence-block-value" style="font-weight: 600;">—</div>
+              </div>
+
+              <div class="evidence-block">
+                <div class="evidence-block-label">Rule Triggered</div>
+                <div id="res-rule" class="evidence-block-value"><span class="rule-tag">—</span></div>
+              </div>
+
+              <div class="evidence-block">
+                <div class="evidence-block-label">Decision Reason</div>
+                <div id="res-reason" class="evidence-block-value">—</div>
+              </div>
+
+              <div class="evidence-block">
+                <div class="evidence-block-label">Next Action</div>
+                <div id="res-next-action" class="evidence-block-value" style="color: var(--text-body);">—</div>
+              </div>
+
+              <a id="res-evidence-link" href="#" class="btn btn-success" style="height: 42px; text-decoration: none;">
+                🔎 Open Full Evidence Card →
+              </a>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/app.js"></script>
+  <script src="js/pages/test.js"></script>
+</body>
+</html>
+
